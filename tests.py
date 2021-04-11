@@ -7,8 +7,17 @@ from random import randint
 # internal imports
 from util import Util
 from rsa import gcd as rgcd
-from rsa import genKeys, getPrimes
+from rsa import genKeys, getPrimes, eea
 from test import Test
+
+def testEEA():
+
+    phin = 12
+    e = 5
+    n = 21
+    d = eea(phin, e)
+    print(d)
+
 
 def testKeys():
     test = Test()
@@ -81,4 +90,5 @@ def testPrimes():
 if __name__ == "__main__":
     # testPrimes()
     # testGCD()
-    testKeys()
+    # testKeys()
+    testEEA()

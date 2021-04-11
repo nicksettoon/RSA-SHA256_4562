@@ -17,9 +17,7 @@ def main():
         exit(0)
     
     # create new key pair
-    keys = genKeys(p,q)
-
-
+    # keys = genKeys(p,q)
 
 def eea(_phin, e):
     """Calulates inverse of e given phi(n). i.e. t in the Extended Euclidean Algorithm when gcd(phi(n),e)=1
@@ -35,9 +33,9 @@ def eea(_phin, e):
     i = 2
     print(f"quotients: {quotients}")
 
-    while len(t) <= len(quotients)-1:
+    while len(t) <= len(quotients)+1:
         t_2 = t[i - 2]
-        q_1 = quotients[i - 1]
+        q_1 = quotients[i - 2]
         t_1 = t[i - 1]
         ti = t_2 - q_1*t_1
         t.append(ti)
