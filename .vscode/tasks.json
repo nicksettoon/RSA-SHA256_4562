@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run",
+            "label": "RSA",
             "type": "shell",
-            "command": "pipenv run python ./main.py",
+            "command": "pipenv run python rsa.py",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -14,9 +14,15 @@
             }
         },
         {
-            "label": "test",
+            "label": "SHA256",
             "type": "shell",
-            "command": "pipenv run python ./test.py",
+            "command": "pipenv run python sha.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "testprimes",
+            "type": "shell",
+            "command": "pipenv run python tests.py",
             "problemMatcher": [],
             "group": {
                 "kind": "test",

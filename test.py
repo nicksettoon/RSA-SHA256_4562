@@ -1,19 +1,15 @@
-import sys
-import os
-from main import Util
 
-def testPrimes():
-    util = Util()
-    print(os.getcwd())
+class Test():
 
-    with open(util.getPath(), "r") as primes:
-        for line in primes.readlines():
-            # print(prime)
-            prime = line.split(",")[1][1:]
-            try:
-                assert Util.isPrime(int(prime)) == True
-            except AssertionError:
-                print(f"isPrime failed to detect {prime} as prime.")
+    def __init__(self):
+        self.failures = 0
+        self.successes = 0
 
-if __name__ == "__main__":
-    testPrimes()
+    def fail(self):
+        self.failures += 1
+    
+    def succ(self):
+        self.successes += 1
+    
+    def tally(self):
+        print(f"\n\nfailures: {self.failures}\tsuccesses:{self.successes}")
