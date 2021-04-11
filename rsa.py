@@ -16,8 +16,11 @@ def main():
     except PrimeNotFound:
         exit(0)
     
-    # create new key pair
-    # keys = genKeys(p,q)
+def enc(_msg, _key):
+    return pow(_msg, _key["e"], _key["n"])
+
+def dec(_msg, _key):
+    return pow(_msg, _key["d"], _key["n"])
 
 def eea(_phin, e):
     """Calulates inverse of e given phi(n). i.e. t in the Extended Euclidean Algorithm when gcd(phi(n),e)=1
@@ -31,9 +34,9 @@ def eea(_phin, e):
 
     t = [0,1]
     i = 2
-    print(f"quotients: {quotients}")
+    # print(f"quotients: {quotients}")
 
-    while len(t) <= len(quotients)+1:
+    while len(t) <= len(quotients):
         t_2 = t[i - 2]
         q_1 = quotients[i - 2]
         t_1 = t[i - 1]
@@ -41,9 +44,19 @@ def eea(_phin, e):
         t.append(ti)
         i += 1
     
-    print(f"ts: {t}")
+    # print(f"ts: {t}")
     return t[i-1]
 
+def printKeys(key):
+    n = key["pub"]["n"]
+    e = key["pub"]["e"]
+    d = key["priv"]["d"]
+    p = key["priv"]["p"]
+    q = key["priv"]["q"]
+    phin = (p-1)*(q-1)
+
+    print(f"p={p}\tq={q}\tn={n}\tphi(n)={phin}\ne={e}\td={d}")
+    
 def genKeys(p,q):
     """Generates public private key pair using Extended Euclidean Algorithm
 
@@ -55,10 +68,8 @@ def genKeys(p,q):
     phin = (p - 1)*(q - 1)
     n = p * q
     e = chooseE(phin)
-    print(f"n = {n}\te = {e}\tphi(n) = {phin}")
 
     d = abs(eea(phin, e))
-    print(f"d = {d}")
 
     keys["pub"]["n"] = n
     keys["pub"]["e"] = e
@@ -66,6 +77,7 @@ def genKeys(p,q):
     keys["priv"]["d"] = d
     keys["priv"]["p"] = p
     keys["priv"]["q"] = q
+    keys["priv"]["n"] = n
 
     return keys
 
@@ -159,7 +171,7 @@ def emptyKeyPair():
     """
 
     pubKey = {"e":None, "n":None}
-    privKey = {"d":None, "p":None, "q":None}
+    privKey = {"d":None, "p":None, "q":None, "n":None}
     pair = {"pub":pubKey, "priv":privKey}
 
     return pair

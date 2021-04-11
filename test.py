@@ -12,4 +12,4 @@ class Test():
         self.successes += 1
     
     def tally(self):
-        print(f"\n\nfailures: {self.failures}\tsuccesses:{self.successes}")
+        print(f"\n\nfailures: {self.failures}\nsuccesses: {self.successes}")

@@ -2,22 +2,27 @@
 import sys
 import os
 from math import gcd as mgcd
+from math import sqrt
 from random import randint
 
 # internal imports
 from util import Util
-from rsa import gcd as rgcd
+from rsa import dec, enc, gcd as rgcd, printKeys
 from rsa import genKeys, getPrimes, eea
 from test import Test
 
 def testEEA():
 
-    phin = 12
-    e = 5
-    n = 21
+    phin = 72
+    e = 31
+    n = 91
     d = eea(phin, e)
     print(d)
+    msg = randint(1, n)
 
+    ciphertext = pow(msg, e, n)
+    dmsg = pow(ciphertext, d, n)
+    print(f"{msg} : {ciphertext},{dmsg}")
 
 def testKeys():
     test = Test()
@@ -25,23 +30,41 @@ def testKeys():
     LIMIT = 10000
     pthPrime = 10
     qthPrime = 19
+    keytests = 25
+    msgtests = 10
     p,q = getPrimes(START, LIMIT, pthPrime, qthPrime)
 
-    for i in range(1,3):
-        print(f"\nTesting key pair: {i}\n")
+    for i in range(1, keytests+1):
+        print(f"\nTesting key pair: {i}")
         keys = genKeys(p,q)
+        printKeys(keys)
+        p = keys["priv"]["p"]
+        q = keys["priv"]["q"]
+        d = keys["priv"]["d"]
+        e = keys["pub"]["e"]
+        n = keys["pub"]["n"]
+        phin = (p - 1)*(q - 1)
+        cgcd1,qs = rgcd(phin, e)
+        cgcd2,qs = rgcd(phin, n)
 
-        for j in range(1,3):
-            msg = randint(1, LIMIT)
-            n = keys["pub"]["n"]
+        print(f"\n1 < e < phi(n)? {(1 < e) and (e < phin)}")
+        print(f"gcd(phi(n),e):{cgcd1}")
+        print(f"gcd(phi(n),n):{cgcd2}\n")
 
-            ciphertext = pow(msg, keys["pub"]["e"]) % n
-            dmsg = pow(ciphertext, keys["priv"]["d"]) % n
+        for j in range(1, msgtests+1):
+            msg = randint(1, n)
+
+            ciphertext = enc(msg, keys["pub"])
+            dmsg = dec(ciphertext, keys["priv"])
+
+            print(f"msg:{msg},ct:{ciphertext},dt:{dmsg}")
 
             try:
                 assert dmsg == msg
+                print("success")
                 test.succ()
             except AssertionError:
+                print("failure")
                 test.fail()
 
     test.tally()
@@ -90,5 +113,5 @@ def testPrimes():
 if __name__ == "__main__":
     # testPrimes()
     # testGCD()
-    # testKeys()
-    testEEA()
+    testKeys()
+    # testEEA()

@@ -3,26 +3,32 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // {
+        //     "label": "RSA",
+        //     "type": "shell",
+        //     "command": "pipenv run python rsa.py",
+        //     "problemMatcher": [],
+        //     "group": {
+        //         "kind": "build",
+        //         "isDefault": true
+        //     }
+        // },
+        // {
+        //     "label": "SHA256",
+        //     "type": "shell",
+        //     "command": "pipenv run python sha.py",
+        //     "problemMatcher": []
+        // },
         {
-            "label": "RSA",
+            "label": "rsa_test",
             "type": "shell",
-            "command": "pipenv run python rsa.py",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "SHA256",
-            "type": "shell",
-            "command": "pipenv run python sha.py",
+            "command": "pipenv run python rsa_tests.py",
             "problemMatcher": []
         },
         {
-            "label": "testprimes",
+            "label": "sha_test",
             "type": "shell",
-            "command": "pipenv run python tests.py",
+            "command": "pipenv run python sha_tests.py",
             "problemMatcher": [],
             "group": {
                 "kind": "test",
