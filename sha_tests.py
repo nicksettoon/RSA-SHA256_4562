@@ -5,7 +5,7 @@ from time import perf_counter
 
 def main():
     OUTPUTPATH = "./_data/sha_puzzle_results.csv"
-    WIDTH = 12
+    WIDTH = 8
     DEPTH = 16
     powtest = PoWTest(WIDTH, DEPTH)
     powtest.run()

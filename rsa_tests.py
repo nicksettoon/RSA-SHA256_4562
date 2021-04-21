@@ -7,22 +7,9 @@ from random import randint
 
 # internal imports
 from util import Util
-from rsa import dec, enc, gcd as rgcd, printKeys
-from rsa import genKeys, getPrimes, eea
+from rsa import dec, enc, egcd
+from rsa import genKeys, getPrimes, printKeys
 from test import Test
-
-def testEEA():
-
-    phin = 72
-    e = 31
-    n = 91
-    d = eea(phin, e)
-    print(d)
-    msg = randint(1, n)
-
-    ciphertext = pow(msg, e, n)
-    dmsg = pow(ciphertext, d, n)
-    print(f"{msg} : {ciphertext},{dmsg}")
 
 def testKeys():
     test = Test()
@@ -30,8 +17,8 @@ def testKeys():
     LIMIT = 10000
     pthPrime = 10
     qthPrime = 19
-    keytests = 25
-    msgtests = 10
+    keytests = 500
+    msgtests = 1000
     p,q = getPrimes(START, LIMIT, pthPrime, qthPrime)
 
     for i in range(1, keytests+1):
@@ -44,8 +31,8 @@ def testKeys():
         e = keys["pub"]["e"]
         n = keys["pub"]["n"]
         phin = (p - 1)*(q - 1)
-        cgcd1,qs = rgcd(phin, e)
-        cgcd2,qs = rgcd(phin, n)
+        cgcd1, x, y = egcd(phin, e)
+        cgcd2, x, y = egcd(phin, n)
 
         print(f"\n1 < e < phi(n)? {(1 < e) and (e < phin)}")
         print(f"gcd(phi(n),e):{cgcd1}")
@@ -70,8 +57,8 @@ def testKeys():
     test.tally()
 
 def testGCD():
-    numtests = 10000
-    maxrand = 500000
+    numtests = 100000
+    maxrand = 50000000
     failures = 0
     successes = 0
 
@@ -81,7 +68,8 @@ def testGCD():
         print(f"\nTesting: gcd({a},{b})")
         try:
             standard = mgcd(a,b)
-            mine, qs = rgcd(a,b)
+            # mine, qs = rgcd(a,b)
+            mine, x, y = egcd(a,b)
             assert mine == standard
             successes += 1
 
@@ -114,4 +102,3 @@ if __name__ == "__main__":
     # testPrimes()
     # testGCD()
     testKeys()
-    # testEEA()
