@@ -2,11 +2,13 @@ from test import Test
 from sha import SHA
 import pandas as pd
 from time import perf_counter
+from sys import argv
+from concurrent.futures import ThreadPoolExecutor
 
 def main():
     OUTPUTPATH = "./_data/sha_puzzle_results.csv"
-    WIDTH = 8
-    DEPTH = 16
+    WIDTH = int(argv[1])
+    DEPTH = int(argv[2])
     powtest = PoWTest(WIDTH, DEPTH)
     powtest.run()
     powtest.printResults()
@@ -28,26 +30,30 @@ class PoWTest():
 
     def run(self):
         starttime = perf_counter()
+        puzzles = []
 
         for B in range(4, (self.width*4), 4):
-
             for i in range(1, self.depth + 1):
-                print(f"Solving Puzzle: {B},{i}")
+                print(f"Generating Puzzle: {B},{i}")
                 puzzle = SHA.generateP(B)
-                # print(f"\nBitlength:{B}\tPuzzle: {puzzle}")
-
-                M, time = SHA.PoW(puzzle)
-
-                if M == None:
-                    print("Did not find solution to puzzle")
-                # else:
-                    # print(f"solution: {M}")
-
-                run = {"bitlength":B, "puzzle":puzzle.bin, "solution":M, "time":time}
-                # print(run)
-
-                self.results = self.results.append(run, ignore_index=True)
+                # append puzzle to puzzle list
+                puzzles.append({(B,i):puzzle})
         
+        with ThreadPoolExecutor(max_workers=12) as exe:
+            results = exe.map(SHA.PoW, puzzles)
+
+        for item in results:
+            # print(item)
+            for key, value in item[0].items():
+                B = key[0]
+                N = key[1]
+                P = value.bin
+            M = item[1]
+            time = item[2]
+
+            run = {"bitlength":B, "puzzle":P, "solution":M, "time":time}
+            self.results = self.results.append(run, ignore_index=True)
+
         self.elapsed = perf_counter() - starttime
 
     def printResults(self):

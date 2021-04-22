@@ -13,16 +13,24 @@ class SHA():
     def PoW(_puzzle):
         starttime = perf_counter()
 
+        for key, value in _puzzle.items():
+            bitlen = key[0]
+            puzzlenum = key[1]
+            puzzle = value
+
+        print(f"Working - len:{bitlen},p:{puzzlenum}")
+
         for M in range(0, maxsize):
             hsh = hashlib.sha256(f"{M}".encode()).digest()
             hsh = BitArray(hsh)
 
-            if hsh.endswith(_puzzle):
+            if hsh.endswith(puzzle):
                 elapsed = perf_counter() - starttime
-                return M, elapsed
+                return _puzzle, M, elapsed
 
         elapsed = perf_counter() - starttime
-        return None, elapsed
+
+        return _puzzle, None, elapsed
 
 
     def generateP(_length):

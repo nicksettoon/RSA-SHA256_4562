@@ -1,4 +1,3 @@
-from math import ceil, floor
 from random import randint
 from util import Util, PrimeNotFound
 import re
@@ -23,13 +22,6 @@ def getModInverse(_divisor, _dividend):
     
     return x % _dividend
 
-def divmod(_divisor, _dividend):
-    quotient = str(_dividend / _divisor)
-    regex = re.search("([\d]*)([.][\d]*)", quotient)
-    intquotient = int(regex.group(1))
-    
-    return intquotient, _dividend % _divisor
-
 def egcd(_divisor, _dividend):
     """Finds greatest common divisor of _divisor and _dividend. Returns gcd, remainder, and quotient
 
@@ -40,7 +32,10 @@ def egcd(_divisor, _dividend):
     if _divisor == 0:
         return _dividend, 0, 1
     else:
-        div, mod = divmod(_divisor, _dividend)
+        quotient = str(_dividend / _divisor)
+        regex = re.search("([\d]*)([.][\d]*)", quotient)
+        div = int(regex.group(1))
+        mod = _dividend % _divisor
         g, x, y = egcd(mod, _divisor)
         return g, y - (div * x), x
 

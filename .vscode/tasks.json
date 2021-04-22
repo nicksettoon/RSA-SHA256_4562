@@ -23,17 +23,17 @@
             "label": "rsa_test",
             "type": "shell",
             "command": "pipenv run python rsa_tests.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "sha_test",
+            "type": "shell",
+            "command": "pipenv run python3 sha_tests.py 6 32",
             "problemMatcher": [],
             "group": {
                 "kind": "test",
                 "isDefault": true
             }
-        },
-        {
-            "label": "sha_test",
-            "type": "shell",
-            "command": "pipenv run python sha_tests.py",
-            "problemMatcher": []
         }
     ]
 }
